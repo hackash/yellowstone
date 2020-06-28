@@ -90,7 +90,7 @@ class RTSPClient extends events_1.EventEmitter {
             client.on("close", closeListener);
         });
     }
-    async connect(url, { keepAlive = true, connection = 'udp' } = { keepAlive: true, connection: 'udp' }) {
+    async connect(url, { keepAlive = true, connection = 'udp' } = { keepAlive: true, connection: 'udp' }, thermal) {
         const { hostname, port } = url_1.parse(this._url = url);
         if (!hostname) {
             throw new Error('URL parsing error in connect method.');
@@ -143,11 +143,11 @@ class RTSPClient extends events_1.EventEmitter {
                 if (mediaSource.control) {
                     if (mediaSource.control.toLowerCase().startsWith('rtsp://')) {
                         // absolute path
-                        streamurl = mediaSource.control;
+                        //streamurl = mediaSource.control;
                     }
                     else {
                         // relative path
-                        streamurl = this._url + '/' + mediaSource.control;
+                        //streamurl = this._url + '/' + mediaSource.control;
                     }
                 }
                 // Perform a SETUP on the streamurl
@@ -186,7 +186,7 @@ class RTSPClient extends events_1.EventEmitter {
                     let setupHeader = { Transport: `RTP/AVP;unicast;client_port=${rtpPort}-${rtcpPort}` };
                     if (this._session)
                         Object.assign(setupHeader, { Session: this._session });
-                    setupRes = await this.request("SETUP", setupHeader, streamurl);
+                    setupRes = await this.request("SETUP", setupHeader, thermal);
                 }
                 else if (connection === "tcp") {
                     // channel 0, RTP
